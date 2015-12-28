@@ -1,0 +1,51 @@
+Setup ELK in Mac
+1. Install Elasticsearch
+	$brew install elasticsearch
+
+2. Install Logstash
+	$brew install logstash
+
+3. Install Kibana
+	$brew install kibana
+
+4. Create a directory to save all the config files for logstash
+	$mkdir /usr/local/Cellular/logstash/1.5.4/conf
+
+6. Create a basic config(say logstash_test.conf) filter inside conf directory.
+	$cd /usr/local/Cellular/logstash/1.5.4/conf
+	$nano logstash_test.conf
+	
+	The content of file looklike:
+	input {
+    file {
+    path => "Desktop/logfile.txt"
+    start_position => "beginning"
+    sincedb_path => "/dev/null"
+    }
+    }
+	output {
+	elasticsearch { host => localhost protocol => "http"}
+	stdout { codec=> rubydebug }
+	}
+
+
+
+7. Run elasticsearch
+	$cd /usr/local/Cellar/elasticsearch/1.7.1/bin/
+	$elasticsearch
+
+8. Go to your web browser and type localhost:9200 and verify elasticsearch is running
+
+9. Open a new terminal tab & run logstash
+	$cd cd /usr/local/Cellar/logstash/1.5.4/conf/
+	$logstash agent -f logstash_test.conf --debug
+
+10. Run kibana from location of kibana
+	$cd /usr/local/Cellar/kibana/4.1.1/bin
+	$kibana
+
+11. Go to your web browser and type localhost:5601 and verify kibana is running
+
+12. Create a index pattern in kibana interface
+
+13. Go to discover tab choose your time range to see the logs in Kibana
